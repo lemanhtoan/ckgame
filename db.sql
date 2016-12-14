@@ -364,6 +364,58 @@ CREATE TABLE `trees` (
 INSERT INTO `trees` VALUES ('1', 'Redwood', '500', '1', '2015-09-01 03:15:12', '2015-09-01 03:15:12');
 INSERT INTO `trees` VALUES ('2', 'Oak', '400', '1', '2015-09-01 03:15:12', '2015-09-01 03:15:12');
 
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+INSERT INTO `users` VALUES ('1', 'toan', 'manhtoan_0510@yahoo.com.vn', '$2y$10$g7c/h4Zf2RuSCJkIQWNtXOyjYwYNGHtZ8HqyLE/GE9.7M5PFqAlwu', '4K481BvnxjwiCtaePoBiLd3NnYuPjoDTDla3y1Y1e0qI5reVRnbVutPcIPnc', '2015-08-31 04:50:44', '2015-09-03 07:01:53');
+INSERT INTO `users` VALUES ('2', 'ToanLM', 'toanktv.it@gmail.com', '$2y$10$g7c/h4Zf2RuSCJkIQWNtXOyjYwYNGHtZ8HqyLE/GE9.7M5PFqAlwu', 'AuMxKU7a8VHsBHShTbFaEtWBWH9LD4lWcOTk2w6Mkp6kKOrUoIYPxTH9b13c', '2015-08-31 07:43:02', '2015-09-03 03:49:10');
+
+
+-- ----------------------------
+-- Table structure for results
+-- ----------------------------
+DROP TABLE IF EXISTS `results`;
+CREATE TABLE `results` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `time_clone` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Table structure for game_type
+-- ----------------------------
+DROP TABLE IF EXISTS `game_type`;
+CREATE TABLE `game_type` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `price` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `time_clone` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Table structure for game_flags
+-- ----------------------------
+DROP TABLE IF EXISTS `game_flags`;
+CREATE TABLE `game_flags` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(50),
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `game_type` int(10),
+  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 -- ----------------------------
 -- Table structure for users
 -- ----------------------------
@@ -373,15 +425,27 @@ CREATE TABLE `users` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `status` int(2),
+  `role` int(2),
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Records of users
+-- Table structure for users_verified
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', 'toan', 'manhtoan_0510@yahoo.com.vn', '$2y$10$g7c/h4Zf2RuSCJkIQWNtXOyjYwYNGHtZ8HqyLE/GE9.7M5PFqAlwu', '4K481BvnxjwiCtaePoBiLd3NnYuPjoDTDla3y1Y1e0qI5reVRnbVutPcIPnc', '2015-08-31 04:50:44', '2015-09-03 07:01:53');
-INSERT INTO `users` VALUES ('2', 'ToanLM', 'toanktv.it@gmail.com', '$2y$10$g7c/h4Zf2RuSCJkIQWNtXOyjYwYNGHtZ8HqyLE/GE9.7M5PFqAlwu', 'AuMxKU7a8VHsBHShTbFaEtWBWH9LD4lWcOTk2w6Mkp6kKOrUoIYPxTH9b13c', '2015-08-31 07:43:02', '2015-09-03 03:49:10');
+DROP TABLE IF EXISTS `users_verified`;
+CREATE TABLE `users_verified` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `status` int(2),
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
