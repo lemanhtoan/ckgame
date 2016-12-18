@@ -1,4 +1,4 @@
-@extends('layouts.sidebar')
+@extends('layouts.default')
 @section('content')
 	ABOUT Page
 {{-- 	<form action="{!! URL::route('language-chooser') !!}" method="post">

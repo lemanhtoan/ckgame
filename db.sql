@@ -394,8 +394,10 @@ DROP TABLE IF EXISTS `game_type`;
 CREATE TABLE `game_type` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `price` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `time_clone` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `min_price` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `max_price` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `time_clone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `default_load` int(1),
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
@@ -404,13 +406,13 @@ CREATE TABLE `game_type` (
 -- ----------------------------
 -- Table structure for game_flags
 -- ----------------------------
-DROP TABLE IF EXISTS `game_flags`;
-CREATE TABLE `game_flags` (
+DROP TABLE IF EXISTS `game_win`;
+CREATE TABLE `game_win` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(50),
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `game_type` int(10),
+  `id_game_clone` int(10),
+  `id_game_user` int(10),
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `date_play` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
@@ -425,8 +427,8 @@ CREATE TABLE `users` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `status` int(2),
-  `role` int(2),
+  `status` int(1),
+  `role` int(1),
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',

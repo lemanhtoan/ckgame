@@ -1,7 +1,5 @@
-<head>
-	<meta name="_token" content="{!! csrf_token() !!}"/>
-</head>
-<body>
+@extends('layouts.default')
+@section('content')
 <div class="secure">Secure Login form</div>
 {!! Form::open(array('url'=>'account/login','method'=>'POST', 'id'=>'myform')) !!}
 <div class="control-group">
@@ -41,5 +39,4 @@ $(document).ready(function(){
 	});
 </script>
 
-
-</body>
+@stop

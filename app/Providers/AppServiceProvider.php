@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Model\Gametype;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->composer('layouts.default', function($view)
+        {
+            $data = Gametype::all();
+            $view->with('data', $data);
+        });
+
+        view()->composer('layouts.sidebar', function($view)
+        {
+            $data = Gametype::all();
+            $view->with('data', $data);
+        });
     }
 
     /**

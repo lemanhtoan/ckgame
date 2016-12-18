@@ -5,10 +5,10 @@
     </div>
     
     <div class="row">
-    
+
         <div class="col-sm-12">            
 
-            <form method="POST" action="<?php echo URL::to('/auth/register') ?>">
+            <form method="POST" action="<?php echo URL::to('/auth/register') ?>" id="registerForm">
                 {!! csrf_field() !!}
 
                 <div class="form-group">
@@ -32,9 +32,40 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-default">Register</button>
+                    <label for="email">Capcha:</label>
+                    <?php 
+                        $a=rand(1,9); 
+                        $b=rand(1,9);
+                        $c=$a+$b;
+                        echo $a."+".$b." =" 
+                    ?>
+                    <p class="capcha-error" style="color: red; display: none;">Wrong capcha code, please try again.</p>
+                    <input type="hidden" name="capcha" value="<?php echo $c; ?>" />
+                    <input type="text" name="recaptcha" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" onclick="return validationsPass()" class="btn btn-default">Register</button>
                 </div>
             </form>
         </div>                 
     </div>    
+    <script type="text/javascript">
+            function validationsPass() {
+                var inp = $('input[name="capcha"').val();
+                var out = $('input[name="recaptcha"').val();
+                if ( inp == out ) {
+                    doRegister();
+                } else {
+                    $('.capcha-error').show();
+                }
+
+                return false;
+            }
+
+            function doRegister(){       
+                $('#registerForm').submit();
+            }
+            
+    </script>
 @stop

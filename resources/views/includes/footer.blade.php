@@ -1,5 +1,5 @@
 <hr/>
-<div id="copyright text-right">&copy; Copyright 2015 - Laravel 5.1 tranning.</div>
+<div id="copyright text-right">&copy; Copyright <?php echo Date('Y'); ?> - CK Game.</div>
 
 <!--check delete-->
 <script>
@@ -9,8 +9,4 @@
 	}
 </script>
 
-<!--add lab ckeditor-->
-<script type="text/javascript">
-    CKEDITOR.replace('product_description');
-</script>
 

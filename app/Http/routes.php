@@ -1,59 +1,28 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-
-//test translate multi language
-// Route::get('/hello', function() {
-//   return View::make('pages.about');
-// });
-
-// Route::post('/language', array(
-//   'before' => 'csrf',
-//   'as' => 'language-chooser', 
-//   'uses' => 'LanguageController@chooser'
-// ));
-
-// Route::post('/language',[
-//     'middleware' => 'localetion',
-//     'as' => 'language-chooser', 
-//     'uses' => 'LanguageController@chooser'
-// ]);
-
-// Route::get('/about1', 
-//   ['middleware' => 'localetion',
-//   'as' => 'language-chooser', 
-//   'uses' => 'LanguageController@chooser', function () {
-//     return view('pages.about');
-// }]);
-
-
-Route::get('/', function() {
-  return View::make('pages.home');
-});
-
-Route::get('home', function() {
-  return View::make('pages.home');
-});
-
-// new-product => call to view catalog/product.blade.php
-// Route::get('/new-product', function() {
-//   return View::make('catalog.product');
-// });
-
-// group common route to group => admin can 
+Route::get('/', 'GameController@homeview');
+Route::get('home', 'GameController@homeview');
 
 // ==== NEED LOGIN BEFORE ACCRESS ====
 
 Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('game/{id}', 'GameController@showPlay');
+
+    Route::get('/gametype', 'GametypeController@index');
+    Route::get('new-gametype','GametypeController@create');
+    Route::post('new-gametype','GametypeController@store');
+    Route::get('gametype/{id}', 'GametypeController@show');
+    Route::get('/gametype/{id}/edit','GametypeController@edit');
+    Route::patch('/gametype/{id}', ['as' => 'gametype.update', 'uses' => 'GametypeController@update']);
+    Route::get('/delete_gametype/{id}','GametypeController@destroy');
+
+    Route::get('/gameclone', 'GamecloneController@index');
+    Route::get('new-gameclone','GamecloneController@create');
+    Route::post('new-gameclone','GamecloneController@store');
+
+    Route::get('/play', 'GameController@index');
+
   Route::get('/new-product', 'productCurd@create');
 
   // save product: url => save-product; Controller name => productCurd; Action function method => saveProduct
@@ -162,79 +131,3 @@ Route::get('user/{id}/posts','User\UserController@user_posts')->where('id', '[0-
 
 // display user's all posts
 Route::get('my-all-posts','User\UserController@user_posts_all');
-
-// crop upload image
-Route::get('/upload', function() {
-  return View::make('pages.upload');
-});
-
-Route::post('/upload', function() {
-  $file = Input::file('image');
-  $file_name = $file->getClientOriginalName();
-  if ($file->move('image', $file_name))
-  {
-    return Redirect::to('jcrop')->with('image', $file_name);
-  } else {
-    return "Upload error";
-  }
-  return View::make('pages.upload');
-});
-
-Route::get('jcrop', function() {
-  return View::make('pages.jcrop')->with('image', 'image/' . Session::get('image'));
-});
-
-Route::post('jcrop', function() {
-  $quality = 90;
-  $src = Input::get('image');
-  $img = imagecreatefromjpeg($src);
-  $dest = ImageCreateTrueColor(Input::get('w'), Input::get('h'));
-  imagecopyresampled($dest, $img, 0, 0, Input::get('x'), Input::get('y'), Input::get('w'), Input::get('h'), Input::get('w'), Input::get('h'));
-  imagejpeg($dest, $src, $quality);
-  return "<img src= '" . $src . "'>";
-});
-
-// facebook auth
-Route::get('facebook', function() {
-  return "<a href='fbauth'> Login FB </a>";
-});
-
-Route::get('fbauth/{auth?}', function($auth = NULL) {
-  if ($auth == 'auth') {
-    try {
-      Hybrid_Endpoint::process();
-    } catch (Exception $e) {
-      return Redirect::to('fbauth');
-    }
-    return;
-  }
-  try {
-    $oauth = new Hybrid_Auth(app_path() . '/config/fb_auth.php');
-    $provider = $oauth->autheticate('Facebook');
-    $profile = $provider->getUserProfile();
-  } catch (Exception $e) {
-    return $e->getMessage();
-  }
-  echo 'Hello ' . $profile->firstName . ' ' . $profile->lastName . '<br>';
-  echo 'Email ' . $profile->email . '<br>';
-  dd($profile);
-});
-
-// ajax load
-Route::get('getting-data', function() {
-  return View::make('test.getting-data');
-});
-
-Route::get('tab1', function() {
-  if (Request::ajax()) {
-    return View::make('test.tab1');
-  }
-  return Response::error('errors.404');
-});
-
-Route::get('tab2', function() {
-  if (Request::ajax()) {
-    return View::make('test.tab2');
-  }
-  return Response::error('errors.404');
-});

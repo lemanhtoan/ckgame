@@ -3,11 +3,29 @@
 	margin: 0 auto;
 	padding: 50px 20px;
 }
-.img-product {
-	border: 1px solid gray;
-	border-radius: 20px;
+
+.item-check {
+	display: inline-flex;
+	margin-right: 40px;
+	font-weight: bold;
+	line-height: 30px;
 }
-#googleMap {
-	width:500px; 
-	height:400px;
+
+.item-check input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+}
+
+.item-check label.lbl-item {
+	line-height: 28px;
+	margin-left: 5px;
+}
+
+.game-description {
+	padding: 30px 0;
+	text-align: center;
+}
+
+.jumbotron h1 {
+	font-size: 40px;
 }
