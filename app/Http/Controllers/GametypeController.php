@@ -100,7 +100,7 @@ class GametypeController extends Controller
     public function update(Request $request, $id)
     {
         $item = Gametype::findOrFail($id);
-        $item->name = $request->get('name');
+        $item->name = $request->input('name');
         $item->link_get = $request->input('link_get');
         $item->min_price = $request->input('min_price');
         $item->max_price = $request->input('max_price');

@@ -12,8 +12,8 @@
 			<li><a href='<?php echo URL::to("/user/$user") ?>'>Show profile</a>
 		<?php endif; ?>
 
-        <li><a href="#">Item 1</a></li>
-        <li><a href="#">Item 2</a></li>
-        <li><a href="#">Item 3</a></li>
+        <li><a href="#">Set Money</a></li>
+        <li><a href="#">Get Money</a></li>
+        <li><a href="#">Game History</a></li>
     </ul>
 </nav>

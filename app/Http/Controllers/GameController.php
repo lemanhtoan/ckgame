@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Model\Gametype;
+use App\Model\GameUser;
 use Session;
 use Validator;
 use Input;
@@ -109,7 +110,7 @@ class GameController extends Controller
     public function update(Request $request, $id)
     {
         $item = Gametype::findOrFail($id);
-        $item->name = $request->get('name');
+        $item->name = $request->input('name');
         $item->link_get = $request->input('link_get');
         $item->min_price = $request->input('min_price');
         $item->max_price = $request->input('max_price');
@@ -141,5 +142,43 @@ class GameController extends Controller
         Gametype::find($id)->delete();
         Session::flash('message',"Delete done");
         return redirect('gametype');
+    }
+
+    public function submitGame(Request $request)
+    {
+        if(\Auth::check()) {
+            $userId = \Auth::user()->id;
+            $gameId = $request->input('gameId');
+            $priceArr = $request->input('valueInp');
+            $numberArr = $request->input('itemCheck');
+            $comparePrice = array();
+            foreach ($priceArr as $key => $value) {
+                if ((strlen($value) > 0) && (in_array($key, $numberArr))) {
+                    $comparePrice[$key] = $value;
+                }
+            }
+            if ($userId) {
+                $url = 'game/'.$gameId;
+                if (!empty($comparePrice)) {
+                    foreach ($comparePrice as $number => $price) {
+                        $item = new GameUser();
+                        $item->id_game = $gameId;
+                        $item->id_user = $userId;
+                        $item->value = $number;
+                        $item->price_set = $price;
+                        $item->date_play = date('Y-m-d H:i:s');
+                        $item->save();
+                    }
+                    Session::flash('message', 'Your data was sent!');
+                    return redirect($url);
+                } else {
+                    Session::flash('message', 'Your data not sent, please select value and play again!');
+                    return redirect($url);
+                }
+            }
+        } else {
+            Session::flash('message', 'You need login!');
+            return redirect('auth/login');
+        }
     }
 }

@@ -451,3 +451,16 @@ CREATE TABLE `users_verified` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- ----------------------------
+-- Table structure for users_amount
+-- ----------------------------
+DROP TABLE IF EXISTS `users_amount`;
+CREATE TABLE `users_amount` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_user` int(10),
+  `mount_before` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `mount_current` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

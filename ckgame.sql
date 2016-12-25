@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 18, 2016 at 10:54 PM
+-- Generation Time: Dec 25, 2016 at 10:40 PM
 -- Server version: 5.6.33-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.20
 
@@ -155,14 +155,14 @@ CREATE TABLE IF NOT EXISTS `game_type` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `game_type`
 --
 
 INSERT INTO `game_type` (`id`, `name`, `link_get`, `min_price`, `max_price`, `time_clone`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'S&P 500 Futures', 'http://www.investing.com/indices/us-spx-500-futures/', '1', '100', '1', 'You can remove it from the WebKit browsers like this', '2016-12-18 00:57:04', '2016-12-18 07:48:42'),
+(1, 'S&P 500 Futures', 'http://www.investing.com/indices/us-spx-500-futures/', '4', '98', '1', 'You can remove it from the WebKit browsers like this', '2016-12-18 00:57:04', '2016-12-20 07:43:36'),
 (2, 'Nasdaq 100 Futures', 'http://www.investing.com/indices/nq-100-futures/', '5', '500', '5', 'There are some other says also that you can share data to all view like view composer', '2016-12-18 00:58:05', '2016-12-18 07:48:56'),
 (3, 'Dow Jones Industrial Average (DJI)', 'http://www.investing.com/indices/us-30/', '10', '1000', '10', '', '2016-12-18 00:58:48', '2016-12-18 00:58:48'),
 (4, 'CBOE Volatility Index (VIX)', 'http://www.investing.com/indices/volatility-s-p-500/', '15', '1500', '15', '', '2016-12-18 00:59:19', '2016-12-18 00:59:19'),
@@ -185,7 +185,25 @@ CREATE TABLE IF NOT EXISTS `game_user` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
+
+--
+-- Dumping data for table `game_user`
+--
+
+INSERT INTO `game_user` (`id`, `id_game`, `id_user`, `value`, `price_set`, `date_play`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, '2', '6', '2016-12-25 03:04:46', '2016-12-25 03:04:46', '2016-12-25 03:04:46'),
+(2, 1, 1, '15', '5', '2016-12-25 03:04:46', '2016-12-25 03:04:46', '2016-12-25 03:04:46'),
+(3, 1, 1, '39', '7', '2016-12-25 03:04:46', '2016-12-25 03:04:46', '2016-12-25 03:04:46'),
+(4, 4, 2, '5', '19', '2016-12-25 03:09:03', '2016-12-25 03:09:03', '2016-12-25 03:09:03'),
+(5, 4, 2, '70', '87', '2016-12-25 03:09:03', '2016-12-25 03:09:03', '2016-12-25 03:09:03'),
+(6, 5, 1, '2', '22', '2016-12-25 07:52:32', '2016-12-25 07:52:32', '2016-12-25 07:52:32'),
+(7, 5, 1, '5', '21', '2016-12-25 07:53:32', '2016-12-25 07:53:32', '2016-12-25 07:53:32'),
+(8, 6, 1, '7', '22', '2016-12-25 07:55:05', '2016-12-25 07:55:05', '2016-12-25 07:55:05'),
+(9, 6, 1, '19', '25', '2016-12-25 07:55:06', '2016-12-25 07:55:06', '2016-12-25 07:55:06'),
+(10, 6, 1, '31', '27', '2016-12-25 07:55:06', '2016-12-25 07:55:06', '2016-12-25 07:55:06'),
+(11, 6, 1, '43', '26', '2016-12-25 07:55:06', '2016-12-25 07:55:06', '2016-12-25 07:55:06'),
+(12, 6, 1, '55', '27', '2016-12-25 07:55:06', '2016-12-25 07:55:06', '2016-12-25 07:55:06');
 
 -- --------------------------------------------------------
 
@@ -384,14 +402,38 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `status`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Alibale', 'root@gmail.com', '$2y$10$FduwfD0PhZskC7Q3ULvUNuGMKKSbXLJjyHg3lFv9XWovePer1xu9C', NULL, NULL, 'W0Aa67jUCYag9XPKgoiNH9KVonly9MYkxbLZcR0zYntVa40zXVmmLWC1eqWH', '2016-12-18 00:30:47', '2016-12-18 08:25:26');
+(1, 'Alibale', 'root@gmail.com', '$2y$10$FduwfD0PhZskC7Q3ULvUNuGMKKSbXLJjyHg3lFv9XWovePer1xu9C', 1, NULL, 'Lj07NkdMveWfPvUV3fb4aqE9okc3kFTjL63HU7nsBJQq1sJ7yjpG0jKdVtr1', '2016-12-18 00:30:47', '2016-12-25 07:46:02'),
+(2, 'toanlm', 'letoan@gmail.com', '$2y$10$xt6tga1Q1Bi8nVX7jee.LOU5kDNlH.PndxylWHXu3SJVobKGga7oO', 0, NULL, NULL, '2016-12-25 03:08:28', '2016-12-25 07:46:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_amount`
+--
+
+CREATE TABLE IF NOT EXISTS `users_amount` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_user` int(10) DEFAULT NULL,
+  `mount_before` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `mount_current` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `users_amount`
+--
+
+INSERT INTO `users_amount` (`id`, `id_user`, `mount_before`, `mount_current`, `created_at`, `updated_at`) VALUES
+(1, 1, '0', '50', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 

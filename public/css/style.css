@@ -29,3 +29,9 @@
 .jumbotron h1 {
 	font-size: 40px;
 }
+
+.input-number {
+	float: right;
+	width: 70px;
+	margin-left: 5px;
+}

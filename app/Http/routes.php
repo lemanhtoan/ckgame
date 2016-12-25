@@ -6,8 +6,13 @@ Route::get('home', 'GameController@homeview');
 // ==== NEED LOGIN BEFORE ACCRESS ====
 
 Route::group(['middleware' => ['auth']], function () {
+    // admin router
+    Route::get('/users', 'User\UserController@users');
+    Route::get('/user/block/{id}', 'User\UserController@block');
 
     Route::get('game/{id}', 'GameController@showPlay');
+    Route::post('/game/play', 'GameController@submitGame');
+    Route::get('user/history', 'User\UserController@gameHistory');
 
     Route::get('/gametype', 'GametypeController@index');
     Route::get('new-gametype','GametypeController@create');
