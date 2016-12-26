@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Model\Gametype;
 use App\Model\GameUser;
+use App\Model\UserAmount;
 use Session;
 use Validator;
 use Input;
@@ -144,6 +145,11 @@ class GameController extends Controller
         return redirect('gametype');
     }
 
+    public function getCurrentPrice($user)
+    {
+        $data = \DB::table('users_amount')->where('id_user', $user)->orderBy('id', 'DESC')->first();
+        return $data;
+    }
     public function submitGame(Request $request)
     {
         if(\Auth::check()) {
@@ -160,17 +166,36 @@ class GameController extends Controller
             if ($userId) {
                 $url = 'game/'.$gameId;
                 if (!empty($comparePrice)) {
+                    $total = 0;
+                    $mountCurrent = (float)($this->getCurrentPrice($userId)->mount_current);
                     foreach ($comparePrice as $number => $price) {
-                        $item = new GameUser();
-                        $item->id_game = $gameId;
-                        $item->id_user = $userId;
-                        $item->value = $number;
-                        $item->price_set = $price;
-                        $item->date_play = date('Y-m-d H:i:s');
-                        $item->save();
+                        $total += $price;
                     }
-                    Session::flash('message', 'Your data was sent!');
-                    return redirect($url);
+                    if ($total <= $mountCurrent) : // total play <= current money
+                        foreach ($comparePrice as $number => $price) {
+                            $item = new GameUser();
+                            $item->id_game = $gameId;
+                            $item->id_user = $userId;
+                            $item->value = $number;
+                            $item->price_set = $price;
+                            $item->date_play = date('Y-m-d H:i:s');
+                            $item->save();
+                        }
+
+                        // - total money current
+                        $itemAmount = new UserAmount();
+                        $itemAmount->id_user = $userId;
+                        $itemAmount->mount_before = $mountCurrent;
+                        $itemAmount->mount_current = $mountCurrent-$total;
+                        $itemAmount->save();
+
+                        Session::flash('message', 'Your data was sent!');
+                        return redirect($url);
+                    else:
+                        Session::flash('message', 'Your not enough money!');
+                        return redirect($url);
+                    endif;
+
                 } else {
                     Session::flash('message', 'Your data not sent, please select value and play again!');
                     return redirect($url);
@@ -180,5 +205,11 @@ class GameController extends Controller
             Session::flash('message', 'You need login!');
             return redirect('auth/login');
         }
+    }
+
+    public function showResult()
+    {
+        $data = [];
+        return view('game.result', ['data' => $data]);
     }
 }

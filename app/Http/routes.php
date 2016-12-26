@@ -9,6 +9,7 @@ Route::group(['middleware' => ['auth']], function () {
     // admin router
     Route::get('/users', 'User\UserController@users');
     Route::get('/user/block/{id}', 'User\UserController@block');
+    Route::get('/results', 'GameController@showResult');
 
     Route::get('game/{id}', 'GameController@showPlay');
     Route::post('/game/play', 'GameController@submitGame');

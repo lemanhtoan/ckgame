@@ -44,6 +44,7 @@
 					  <span class="caret"></span></a>
 				  <ul class="dropdown-menu">
 					  <li><a href="<?php echo URL::to('/users') ?>">Manager User</a></li>
+					  <li><a href="<?php echo URL::to('/results') ?>">Manager Result</a></li>
 				  </ul>
 			  </li>
 
