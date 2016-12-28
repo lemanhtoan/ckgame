@@ -150,6 +150,7 @@ class GameController extends Controller
         $data = \DB::table('users_amount')->where('id_user', $user)->orderBy('id', 'DESC')->first();
         return $data;
     }
+    
     public function submitGame(Request $request)
     {
         if(\Auth::check()) {
@@ -211,5 +212,23 @@ class GameController extends Controller
     {
         $data = [];
         return view('game.result', ['data' => $data]);
+    }
+
+    public function getResult(Request $request) 
+    {
+        $dateArr = explode("/", $request->input('date'));
+        $day = $dateArr[1]; $month = $dateArr[0]; $year = $dateArr[2];
+
+        // get right number in date
+        $sqlNumberRight = \DB::table('game_clone')
+            ->whereDay('date_clone', '=', $day)
+            ->whereMonth('date_clone', '=', $month) 
+            ->whereYear('date_clone', '=', $year)
+            ->get();
+
+        // get all record in date and find number (and others information) right
+        //game_user
+        
+        var_dump($date, $dateArr, $sqlNumberRight);die;
     }
 }
