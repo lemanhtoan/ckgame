@@ -15,6 +15,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('game/{id}', 'GameController@showPlay');
     Route::post('/game/play', 'GameController@submitGame');
     Route::get('user/history', 'User\UserController@gameHistory');
+    Route::get('userhistory/{id}', 'User\UserController@userHistory');
+    Route::get('/payUser/{id}', 'User\UserController@payToUser');
+    Route::post('/payToUser', 'GameController@payToUser');
+    Route::get('/minusUser/{id}', 'User\UserController@minusToUser');
+    Route::post('/minusToUser', 'GameController@minusToUser');
 
     Route::get('/gametype', 'GametypeController@index');
     Route::get('new-gametype','GametypeController@create');

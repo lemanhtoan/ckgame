@@ -7,6 +7,11 @@
 	{
 		return confirm("Are you want delete?");
 	}
+
+    function checkPay()
+    {
+        return confirm("Are you want pay to customer?");
+    }
 </script>
 
 <script>

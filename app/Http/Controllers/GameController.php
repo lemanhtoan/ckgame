@@ -228,7 +228,57 @@ class GameController extends Controller
 
         // get all record in date and find number (and others information) right
         //game_user
-        
-        var_dump($date, $dateArr, $sqlNumberRight);die;
+        $sqlData = \DB::table('game_type as gt')
+            ->leftJoin('game_clone as gc', 'gc.id_game', '=', 'gt.id')
+            ->leftJoin('game_user as gu', 'gu.id_game', '=', 'gt.id')
+            ->whereDay('gc.date_clone', '=', $day)
+            ->whereMonth('gc.date_clone', '=', $month) 
+            ->whereYear('gc.date_clone', '=', $year)
+            ->get(['gt.id as gameId', 'gt.name as gameName', 'gc.value as gameRightValue', 'gc.id_game as gameIdClone', 'gu.id_user as userIdPlay', 'gu.value as userNumberSet', 'gu.price_set as userPriceSet']);
+        $dataOut = array();
+        if ( sizeof($sqlData) > 0) {
+            foreach ($sqlData as $item) { 
+                if ( ($item->gameId == $item->gameIdClone) && ($item->gameRightValue == $item->userNumberSet) ) {
+                    $dataOut['right'][] = $item;
+                } else {
+                    $dataOut['wrong'][] = $item;
+                }
+            }
+        } 
+        return view('game.result', ['data' => $dataOut]);
+        //var_dump($dateArr, $sqlNumberRight, $sqlData, $dataOut);die;
+    }
+
+    public function payToUser(Request $request)
+    {
+        $userId = $request->input('userId');
+        $dataUser = \DB::table('users_amount')->where('id_user', $userId)->orderBy('id', 'DESC')->first();
+        $userBefore = $dataUser->mount_current;
+        $userNow = $userBefore + $request->input('value');
+
+        $itemAmount = new UserAmount();
+        $itemAmount->id_user = $userId;
+        $itemAmount->mount_before = $userBefore;
+        $itemAmount->mount_current = $userNow;
+        $itemAmount->save();
+        Session::flash('message', 'Your data was sent!');
+        return view('/user/actionpay', ['data' => $userId]);
+    }
+
+    public function minusToUser(Request $request)
+    {
+        $userId = $request->input('userId');
+        $dataUser = \DB::table('users_amount')->where('id_user', $userId)->orderBy('id', 'DESC')->first();
+        $userBefore = $dataUser->mount_current;
+        $userNow = $userBefore - $request->input('value');
+
+        $itemAmount = new UserAmount();
+        $itemAmount->id_user = $userId;
+        $itemAmount->mount_before = $userBefore;
+        $itemAmount->mount_current = $userNow;
+        $itemAmount->save();
+        Session::flash('message', 'Your data was sent!');
+        //return view('/user/actionminus', ['data' => $userId, 'user'=> $dataUser]);
+        return redirect('users');
     }
 }

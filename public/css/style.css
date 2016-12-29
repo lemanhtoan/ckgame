@@ -39,3 +39,13 @@
 .results.bootstrap-iso {
 	position: relative;
 }
+
+b.red {
+	color: red;
+	font-size: 18px;
+}
+
+b.green {
+	color: green;
+	font-size: 18px;
+}

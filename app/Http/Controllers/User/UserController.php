@@ -57,7 +57,6 @@ class UserController extends Controller
 
     public function user_posts($id)
     {
-        //
         $posts = Posts::where('author_id',$id)->where('active','1')->orderBy('created_at','desc')->paginate(5);
         $title = User::find($id)->name;
         return view('home')->withPosts($posts)->withTitle($title);
@@ -65,10 +64,27 @@ class UserController extends Controller
 
     public function user_posts_all(Request $request)
     {
-        //
         $user = $request->user();
         $posts = Posts::where('author_id',$user->id)->orderBy('created_at','desc')->paginate(5);
         $title = $user->name;
         return view('home')->withPosts($posts)->withTitle($title);
+    }
+
+    public function userHistory($id)
+    {
+        $data = \DB::table('users_amount')->where('id_user', $id)->get();
+        return view('user/actionhistory', ['data' => $data, 'name'=>\Auth::user()->name]);
+    }
+
+    public function payToUser($id)
+    {
+        $dataUser = \DB::table('users_amount')->where('id_user', $id)->orderBy('id', 'DESC')->first();
+        return view('user/actionpay', ['data' => $id, 'user' => $dataUser]);
+    }
+
+    public function minusToUser($id)
+    {
+        $dataUser = \DB::table('users_amount')->where('id_user', $id)->orderBy('id', 'DESC')->first();
+        return view('user/actionminus', ['data' => $id, 'user' => $dataUser]);
     }
 }
