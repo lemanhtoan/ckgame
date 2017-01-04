@@ -1,5 +1,16 @@
 @extends('layouts.default')
 @section('content')
+    <p class="head"><img src="<?php echo url('/').'/image/slider1.jpg';?>"/></p>
+    @if(Session::has('message'))
+        <div class="alert alert-info">
+            {!! Session::get('message') !!}
+        </div>
+    @endif
+    @if(Session::has('error'))
+        <div class="alert alert-danger">
+            {!! Session::get('error') !!}
+        </div>
+    @endif
     <h2>HOME PAGE HERE</h2>
     <?php 
 //	$curl_handleUS500 = curl_init();

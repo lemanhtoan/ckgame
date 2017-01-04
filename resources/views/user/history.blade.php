@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
 	<div class="jumbotron">
-		<h1>User Histoty - {!! $name !!}</h1>
+		<h1>User History - {!! $name !!} (Play game)</h1>
 		@if(Session::has('message'))
 			<div class="alert alert-info">
 				{!! Session::get('message') !!}
@@ -14,19 +14,20 @@
 			<tr>
 				<th>#</th>
 				<th>Game Name</th>
+				<th>User</th>
 				<th>Number</th>
 				<th>Price</th>
-				<th>Date Play</th>
+				<th>Time Play</th>
 			</tr>
 			</thead>
 			<tbody>
 			@foreach ($data as $item)
-				<?php //echo "<pre>"; var_dump($item);?>
 				<tr>
 					<td>{!! $item->gUGameId !!}</td>
 					<td>{!! $item->gTName !!}</td>
+					<td><a href="<?php echo URL::to('/user/') ?>/{{ $item->uId }}">{!! $item->uName !!}</a></td>
 					<td>{!! $item->gUValue !!}</td>
-					<td>{!! $item->gUPrice !!}</td>
+					<td>${!! $item->gUPrice !!}</td>
 					<td>{!! $item->gUDatePlay !!}</td>
 				</tr>
 			@endforeach

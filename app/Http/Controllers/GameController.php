@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -13,6 +14,7 @@ use App\Model\UserAmount;
 use Session;
 use Validator;
 use Input;
+use Mail;
 
 class GameController extends Controller
 {
@@ -148,6 +150,12 @@ class GameController extends Controller
     public function getCurrentPrice($user)
     {
         $data = \DB::table('users_amount')->where('id_user', $user)->orderBy('id', 'DESC')->first();
+        if (empty($data)) {
+            $data = new UserAmount();
+            $data->id_user = $user;
+            $data->mount_before = 0;
+            $data->mount_current = 0;
+        }
         return $data;
     }
     
@@ -164,43 +172,69 @@ class GameController extends Controller
                     $comparePrice[$key] = $value;
                 }
             }
-            if ($userId) {
-                $url = 'game/'.$gameId;
-                if (!empty($comparePrice)) {
-                    $total = 0;
-                    $mountCurrent = (float)($this->getCurrentPrice($userId)->mount_current);
-                    foreach ($comparePrice as $number => $price) {
-                        $total += $price;
-                    }
-                    if ($total <= $mountCurrent) : // total play <= current money
+            $url = 'game/' . $gameId;
+            // check before one hour close game => not accept record
+            // echo date('Y-m-d H:i:s'), date('H', strtotime(date('Y-m-d H:i:s')));die;
+            $gameType  = Gametype::findOrFail($gameId);
+            if ( ($gameType) && ($gameType->time_clone - 1) >= date('H', strtotime(date('Y-m-d H:i:s')))  ) {
+
+                if ($userId) {
+                    if (!empty($comparePrice)) {
+                        $total = 0;
+                        $mountCurrent = (float)($this->getCurrentPrice($userId)->mount_current);
                         foreach ($comparePrice as $number => $price) {
-                            $item = new GameUser();
-                            $item->id_game = $gameId;
-                            $item->id_user = $userId;
-                            $item->value = $number;
-                            $item->price_set = $price;
-                            $item->date_play = date('Y-m-d H:i:s');
-                            $item->save();
+                            $total += $price;
                         }
 
-                        // - total money current
-                        $itemAmount = new UserAmount();
-                        $itemAmount->id_user = $userId;
-                        $itemAmount->mount_before = $mountCurrent;
-                        $itemAmount->mount_current = $mountCurrent-$total;
-                        $itemAmount->save();
+                        $arrData = array();
+                        if ($total <= $mountCurrent) : // total play <= current money
+                            foreach ($comparePrice as $number => $price) {
+                                $item = new GameUser();
+                                $item->id_game = $gameId;
+                                $item->id_user = $userId;
+                                $item->value = $number;
+                                $item->price_set = $price;
+                                $item->date_play = date('Y-m-d H:i:s');
+                                $item->save();
+                                array_push($arrData, array(
+                                    'number'=>$number,
+                                    'price'=> $price
+                                ));
+                            }
 
-                        Session::flash('message', 'Your data was sent!');
-                        return redirect($url);
-                    else:
-                        Session::flash('message', 'Your not enough money!');
-                        return redirect($url);
-                    endif;
+                            // email to user and admin too => admin config later
+                            $data = array(
+                                'email' => \Auth::user()->email,
+                                'name' => \Auth::user()->name,
+                                'items' => $arrData,
+                                'total' => $total
+                            );
 
+                            Mail::send('game.emailplay', ['data' => $data], function ($message) use ($data) {
+                                $message->to($data['email'], $data['name'])->subject('Email play game');
+                            });
+
+                            // - total money current
+                            $itemAmount = new UserAmount();
+                            $itemAmount->id_user = $userId;
+                            $itemAmount->mount_before = $mountCurrent;
+                            $itemAmount->mount_current = $mountCurrent - $total;
+                            $itemAmount->save();
+
+                            Session::flash('message', 'Your data was sent!');
+                            return redirect($url);
+                        else:
+                            Session::flash('message', 'Your not enough money!');
+                            return redirect($url);
+                        endif;
+                    }
                 } else {
                     Session::flash('message', 'Your data not sent, please select value and play again!');
                     return redirect($url);
                 }
+            } else {
+                Session::flash('message', 'Your play fail, time play need before one hour close game!');
+                return redirect($url);
             }
         } else {
             Session::flash('message', 'You need login!');
@@ -219,22 +253,16 @@ class GameController extends Controller
         $dateArr = explode("/", $request->input('date'));
         $day = $dateArr[1]; $month = $dateArr[0]; $year = $dateArr[2];
 
-        // get right number in date
-        $sqlNumberRight = \DB::table('game_clone')
-            ->whereDay('date_clone', '=', $day)
-            ->whereMonth('date_clone', '=', $month) 
-            ->whereYear('date_clone', '=', $year)
-            ->get();
-
         // get all record in date and find number (and others information) right
         //game_user
         $sqlData = \DB::table('game_type as gt')
             ->leftJoin('game_clone as gc', 'gc.id_game', '=', 'gt.id')
             ->leftJoin('game_user as gu', 'gu.id_game', '=', 'gt.id')
+            ->leftJoin('users as u', 'u.id', '=', 'gu.id_user')
             ->whereDay('gc.date_clone', '=', $day)
             ->whereMonth('gc.date_clone', '=', $month) 
             ->whereYear('gc.date_clone', '=', $year)
-            ->get(['gt.id as gameId', 'gt.name as gameName', 'gc.value as gameRightValue', 'gc.id_game as gameIdClone', 'gu.id_user as userIdPlay', 'gu.value as userNumberSet', 'gu.price_set as userPriceSet']);
+            ->get(['gt.id as gameId', 'gt.name as gameName', 'gc.value as gameRightValue', 'gc.id_game as gameIdClone', 'gu.id_user as userIdPlay', 'gu.value as userNumberSet', 'gu.price_set as userPriceSet', 'u.name as userName']);
         $dataOut = array();
         if ( sizeof($sqlData) > 0) {
             foreach ($sqlData as $item) { 
@@ -252,6 +280,7 @@ class GameController extends Controller
     public function payToUser(Request $request)
     {
         $userId = $request->input('userId');
+        $user = User::findOrFail($userId);
         $dataUser = \DB::table('users_amount')->where('id_user', $userId)->orderBy('id', 'DESC')->first();
         $userBefore = $dataUser->mount_current;
         $userNow = $userBefore + $request->input('value');
@@ -261,6 +290,19 @@ class GameController extends Controller
         $itemAmount->mount_before = $userBefore;
         $itemAmount->mount_current = $userNow;
         $itemAmount->save();
+
+        // email to user and admin too => admin config later
+        $data = array(
+            'email' => $user->email,
+            'name' => $user->name,
+            'valueAdd' => $request->input('value'),
+            'valueNow' => $userNow
+        );
+
+        Mail::send('game.emailpay', ['data' => $data], function ($message) use ($data) {
+            $message->to($data['email'], $data['name'])->subject('Email pay to user');
+        });
+
         Session::flash('message', 'Your data was sent!');
         return view('/user/actionpay', ['data' => $userId]);
     }
@@ -277,8 +319,13 @@ class GameController extends Controller
         $itemAmount->mount_before = $userBefore;
         $itemAmount->mount_current = $userNow;
         $itemAmount->save();
+
+//        email to user and admin too
+//        Mail::send('auth.active', ['data' => $data], function ($message) use ($data, $input) {
+//            $message->to($input['email'], $input['name'])->subject('Please verify your account registration');
+//        });
+
         Session::flash('message', 'Your data was sent!');
-        //return view('/user/actionminus', ['data' => $userId, 'user'=> $dataUser]);
         return redirect('users');
     }
 }

@@ -8,7 +8,7 @@
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group"> <!-- Date input -->
                 <label class="control-label" for="date">Date</label>
-                <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
+                <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text" required/>
             </div>
             <div class="form-group"> <!-- Submit button -->
                 <button class="btn btn-primary " name="submit" type="submit">Submit</button>
@@ -16,9 +16,9 @@
         </form>
 
         <?php if (!empty($data)) : ?>
-
-            <?php $right = $data['right']; $wrong = $data['wrong'];?>
+            <?php if (!empty($data['right'])) : $right = $data['right']; ?>
             <?php $i = 0; if (count($right)) : ?>
+                <h3 class="sub-title">List result right</h3>
                 <table class="table right">
                     <thead>
                     <tr>
@@ -37,7 +37,7 @@
                             <td>{!! $i !!}</td>
                             <td>{!! $item->gameName !!}</td>
                             <td><b class="red">{!! $item->gameRightValue !!}</b></td>
-                            <td>{!! $item->userIdPlay !!}</td>
+                            <td><a href="<?php echo URL::to('/userhistory') ?>/{{ $item->userIdPlay }}">{{ $item->userName }}</a></td>
                             <td><b class="green">{!! $item->userNumberSet !!}</b></td>
                             <td>{!! $item->userPriceSet !!}</td>
                             <td><a href="<?php echo URL::to('/userhistory') ?>/{{ $item->userIdPlay }}"> Check history & pay </a></td>   
@@ -45,9 +45,10 @@
                     @endforeach
                     </tbody>
                 </table>
-            <?php endif; ?>
+            <?php endif; endif;?>
 
-            <?php $i=0; if (count($wrong)) :?>
+            <?php if (!empty($data['wrong'])): $wrong = $data['wrong']; $i=0; if (count($wrong)) :?>
+                <h3 class="sub-title">List result wrong</h3>
                 <table class="table wrong">
                     <thead>
                     <tr>
@@ -65,14 +66,16 @@
                             <td>{!! $i !!}</td>
                             <td>{!! $item->gameName !!}</td>
                             <td>{!! $item->gameRightValue !!}</td>
-                            <td>{!! $item->userIdPlay !!}</td>
+                            <td><a href="<?php echo URL::to('/user/') ?>/{{ $item->userIdPlay }}">{{ $item->userName }}</a></td>
                             <td>{!! $item->userNumberSet !!}</td>
                             <td>{!! $item->userPriceSet !!}</td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
-            <?php endif; ?>
+            <?php endif; endif; ?>
+        <?php else: ?>
+        <h2>Empty</h2>
         <?php endif; ?>
     </div>
 @stop

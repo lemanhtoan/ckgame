@@ -22,13 +22,12 @@
 			<tbody>
 			<?php $i=0;?>
 			@foreach ($data as $item) <?php $i++; ?>
-				<?php //echo "<pre>"; var_dump($item);?>
 				<tr>
 					<td>{!! $i !!}</td>
 					<td><a href="<?php echo URL::to('/user/') ?>/{{ $item->id_user }}">{!! $item->uName !!}</a></td>
 					<td>{!! $item->mount_before !!}</td>
 					<td><?php if ($i==1) :?><b class="green">{!! $item->mount_current !!}</b><?php else: ?> {!! $item->mount_current !!} <?php endif;?></td>
-					<td><?php if ($i==1) :?><a href="{!! URL::to('/payUser/'.$item->id_user) !!}" onclick="return checkPay()">Pay</a><?php endif;?></td>
+					<td><?php if ($i==1) :?><a href="{!! URL::to('/minusUser/'.$item->id_user) !!}" onclick="return checkPay()">Get money</a><?php endif;?></td>
 				</tr>
 			@endforeach
 

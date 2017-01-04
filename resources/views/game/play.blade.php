@@ -41,6 +41,7 @@
 				} else {
 					var i =  $(this).attr('id').split('chb')[1];
 					$('#inp' + i).removeAttr('required');
+					$('#inp' + i).val("");
 					$('#inp' + i).hide();
 				}
 			});

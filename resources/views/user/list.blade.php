@@ -28,12 +28,14 @@
 					<td>{!! $item->name !!}</td>
 					<td>{!! $item->email !!}</td>
 					<td>
-						@if ($item->status == 1)
+						@if ($item->confirmed == 1)
 							<a href="<?php echo URL::to('/user/block') ?>/{{ $item->id }}"> Block </a>
 							|
 							<a href="{!! URL::to('/payUser/'.$item->id) !!}" onclick="return checkPay()">Pay</a>
 							|
 							<a href="{!! URL::to('/minusUser/'.$item->id) !!}" onclick="return checkPay()">Minus money</a>
+							|
+							<a href="<?php echo URL::to('/userhistory') ?>/{{ $item->id }}"> Check history</a>
 						@endif
 					</td>
 				</tr>

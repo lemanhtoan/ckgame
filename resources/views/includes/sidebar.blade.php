@@ -11,9 +11,10 @@
 			<li><a href="<?php echo URL::to('/auth/logout') ?>">Logout</a>
 			<li><a href='<?php echo URL::to("/user/$user") ?>'>Show profile</a>
 		<?php endif; ?>
-
-        <li><a href="#">Set Money</a></li>
-        <li><a href="#">Get Money</a></li>
-        <li><a href="#">Game History</a></li>
+        <?php if (preg_match("/\/(\d+)$/", $_SERVER['REQUEST_URI'], $matches) != 0) : if ( preg_match("/\/(\d+)$/", $_SERVER['REQUEST_URI'], $matches) ) $uId = $matches[1]; ?>
+        <li><a href="<?php echo URL::to('/payUser/') ?>/<?php echo $uId; ?>">Set Money</a></li>
+        <li><a href="<?php echo URL::to('/minusUser/') ?>/<?php echo $uId; ?>">Get Money</a></li>
+        <li><a href="<?php echo URL::to('/userhistory/') ?>/<?php echo $uId; ?>">Game History</a></li>
+        <?php endif; ?>
     </ul>
 </nav>

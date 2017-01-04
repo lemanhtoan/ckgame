@@ -1,14 +1,8 @@
 @extends('layouts.default')
 @section('content')
-	ABOUT Page
-{{-- 	<form action="{!! URL::route('language-chooser') !!}" method="post">
-		
-		<select name="locale">
-			<option value="en">English</option>
-			<option value="vn">VietNam</option>
-		</select>
-		<input type="submit" value="OK">
-		{!! Form::token() !!}
-	</form> --}}
-	{!! trans('message.welcome') !!}
+	<h2>About us</h2>
+	<p><img class="img-product" src="<?php echo url('/').'/image/about.jpeg';?>" /></p>
+	<p>
+		There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+	</p>
 @stop

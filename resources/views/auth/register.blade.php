@@ -1,7 +1,19 @@
 @extends('layouts.sidebar')
 @section('content')
     <div class="jumbotron">
-        <h1>Login</h1>
+        <h1>Register</h1>
+        @if(Session::has('message'))
+            <div class="alert alert-info">
+                {!! Session::get('message') !!}
+            </div>
+        @endif
+        @if ($errors->has())
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    {{ $error }}<br>
+                @endforeach
+            </div>
+        @endif
     </div>
     
     <div class="row">

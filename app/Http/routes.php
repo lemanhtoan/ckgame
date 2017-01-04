@@ -16,6 +16,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/game/play', 'GameController@submitGame');
     Route::get('user/history', 'User\UserController@gameHistory');
     Route::get('userhistory/{id}', 'User\UserController@userHistory');
+    Route::get('user/historymoney/{id}', 'User\UserController@userMoney');
     Route::get('/payUser/{id}', 'User\UserController@payToUser');
     Route::post('/payToUser', 'GameController@payToUser');
     Route::get('/minusUser/{id}', 'User\UserController@minusToUser');
@@ -118,11 +119,14 @@ Route::get('/show/{id}','ContactController@show');
 // Auth
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::post('auth/login', 'User\UserController@postLogin');
 
 // Registration routes...
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
+Route::get('auth/register', 'User\UserController@getRegister');
+Route::post('auth/register', 'User\UserController@postRegister');
+Route::get('/register/verify/{code}', [
+    'as' => 'activate', 'uses' => 'User\UserController@activate'
+]);
 
 // reset password
 Route::get('password/email', 'Auth\PasswordController@getEmail');

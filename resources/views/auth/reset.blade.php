@@ -2,6 +2,18 @@
 @section('content')
     <div class="jumbotron">
         <h1>Reset password step2</h1>
+        @if(Session::has('message'))
+            <div class="alert alert-info">
+                {!! Session::get('message') !!}
+            </div>
+        @endif
+        @if ($errors->has())
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    {{ $error }}<br>
+                @endforeach
+            </div>
+        @endif
     </div>        
     <div class="row">        
         <div class="col-sm-12">    
