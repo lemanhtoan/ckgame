@@ -11,7 +11,7 @@
                 <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text" required/>
             </div>
             <div class="form-group"> <!-- Submit button -->
-                <button class="btn btn-primary " name="submit" type="submit">Submit</button>
+                <button class="btn btn-primary " name="submit" type="submit">Find</button>
             </div>
         </form>
 

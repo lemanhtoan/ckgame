@@ -1,6 +1,6 @@
 @extends('layouts.default')
 @section('content')
-    <p class="head"><img src="<?php echo url('/').'/image/slider1.jpg';?>"/></p>
+    <p class="head"><img src="<?php echo url('/').'/public/image/slider1.jpg';?>"/></p>
     @if(Session::has('message'))
         <div class="alert alert-info">
             {!! Session::get('message') !!}

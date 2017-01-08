@@ -18,8 +18,11 @@
 						@endforeach
 					</ul>
 				</li>
-			<?php endif;  ?>
 
+			<?php endif;  ?>
+				<li class="{!! set_active('gamehis') !!}">
+					<a href="{!! URL::to('/historygame') !!}">Find History Result</a>
+				</li>
 
 			<?php if (Auth::check()) : $user = Auth::user()->id; if ($user == 1):  ?>
 			<li class="{!! set_active('gametype') !!}"><a href="{{ url('/gametype') }}">Game Type</a></li>

@@ -50,7 +50,7 @@ class UserController extends Controller
             ->leftJoin('game_user as gu', 'u.id', '=', 'gu.id_user')
             ->leftJoin('game_type as gt', 'gt.id', '=', 'gu.id_game')
             ->where('u.id', $id)
-            ->orderBy('gt.id', 'DESC')
+            ->orderBy('gu.date_play', 'DESC')
             ->get([
                 'u.name as uName', 'u.id as uId',
                 'gu.value as gUValue', 'gu.price_set as gUPrice', 'gu.date_play as gUDatePlay', 'gu.id_game as gUGameId',

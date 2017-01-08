@@ -1,2 +1,18 @@
 php artisan key:generate
 
+thông tin server
+45.63.39.34
+root / ]fV4EFqd,pez,rM+
+database:
+Ten Database: keycodestor_cc72
+User name: keycodestocc72
+Mat khau: 2433cf05f93b7573
+
+
+Database duoc tao tu dong cho azinstant.com :
+-------------------------------------------------------------------------
+Ten Database: azinstant_c_b127
+User name: azinstantcb127
+Mat khau: 476d9953fbc39ec3
+domain là azinstant.com
+

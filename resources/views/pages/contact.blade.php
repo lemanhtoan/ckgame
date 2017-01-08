@@ -2,7 +2,7 @@
 @section('content')
 	<h2>Contact page</h2>
 
-	<p class="head"><img src="<?php echo url('/').'/image/slider1.jpg';?>"/></p>
+	<p class="head"><img src="<?php echo url('/').'/public/image/slider1.jpg';?>"/></p>
 	<div class="row">
 		<div class="col-md-6">
 			{!! Form::open(array('url' => 'send-contact')) !!}

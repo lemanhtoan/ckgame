@@ -248,6 +248,12 @@ class GameController extends Controller
         return view('game.result', ['data' => $data]);
     }
 
+    public function showResultHis()
+    {
+        $data = [];
+        return view('game.resulthis', ['data' => $data]);
+    }
+
     public function getResult(Request $request) 
     {
         $dateArr = explode("/", $request->input('date'));
@@ -275,6 +281,30 @@ class GameController extends Controller
         } 
         return view('game.result', ['data' => $dataOut]);
         //var_dump($dateArr, $sqlNumberRight, $sqlData, $dataOut);die;
+    }
+
+    public function getResultNumber(Request $request)
+    {
+        $dateArr = explode("/", $request->input('date'));
+        $day = $dateArr[1]; $month = $dateArr[0]; $year = $dateArr[2];
+
+        // get all record in date and find number (and others information) right
+        //game_user
+        $sqlData = \DB::table('game_type as gt')
+            ->leftJoin('game_clone as gc', 'gc.id_game', '=', 'gt.id')
+            ->whereDay('gc.date_clone', '=', $day)
+            ->whereMonth('gc.date_clone', '=', $month)
+            ->whereYear('gc.date_clone', '=', $year)
+            ->get(['gt.id as gameId', 'gt.name as gameName', 'gc.id_game as gameIdClone', 'gc.value as gameRightValue']);
+        $dataOut = array();
+        if ( sizeof($sqlData) > 0) {
+            foreach ($sqlData as $item) {
+                if ( $item->gameId == $item->gameIdClone ) {
+                    $dataOut['right'][] = $item;
+                }
+            }
+        }
+        return view('game.resulthis', ['data' => $dataOut]);
     }
 
     public function payToUser(Request $request)
